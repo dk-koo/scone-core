@@ -171,7 +171,7 @@ def classify_variable(var_name: str) -> str:
 
 
 def _get_integration_function():
-    return getattr(np, "trapezoid", np.trapz)
+    return (getattr(np, "trapezoid", None) or getattr(np, "trapz"))
 
 
 def _get_analysis_axis(time_arr: Optional[np.ndarray], expected_length: int) -> tuple:
@@ -442,7 +442,7 @@ def _masked_auc(data_arr: np.ndarray, mask: np.ndarray, time_arr: Optional[np.nd
 
     valid_mask = mask & np.isfinite(data_arr) & np.isfinite(x_arr)
     auc = 0.0
-    integrate = getattr(np, "trapezoid", np.trapz)
+    integrate = (getattr(np, "trapezoid", None) or getattr(np, "trapz"))
     for start_idx, end_idx in _true_runs(valid_mask):
         if end_idx <= start_idx:
             continue
